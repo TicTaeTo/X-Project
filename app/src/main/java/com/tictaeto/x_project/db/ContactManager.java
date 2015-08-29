@@ -3,7 +3,6 @@ package com.tictaeto.x_project.db;
 /**
  * Created by DEN on 29.08.2015.
  */
-<<<<<<< HEAD
 public final class ContactManager {
     private static ContactManager instance = null;
 
