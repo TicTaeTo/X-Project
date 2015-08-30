@@ -14,4 +14,5 @@ public class ChatItem {
     public int getChatID() {
         return chatID;
     }
+
 }
