@@ -1,6 +1,6 @@
 package com.tictaeto.x_project.db;
 
-import android.content.Context;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -9,19 +9,19 @@ import com.tictaeto.x_project.items.ChatItem;
 import java.util.ArrayList;
 
 /**
- * Created by DEN on 29.08.2015.
+ * Created by Denis Ligin on 29.08.2015.
  */
-public final class ChatManager {
+public final class ChatManager implements ColumnConstants {
     private static ChatManager instance = null;
     private DBHelper dbHelper;
 
-    private ChatManager(Context context) {
-        dbHelper = new DBHelper();
+    private ChatManager() {
+        dbHelper = DBHelper.get();
     }
 
-    public static ChatManager get(Context context) {
+    public static ChatManager get() {
         if (instance == null) {
-            instance = new ChatManager(context);
+            instance = new ChatManager();
         }
         return instance;
     }
@@ -30,11 +30,13 @@ public final class ChatManager {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         ChatItem chatItem = new ChatItem();
         Cursor cursor = db.rawQuery("select * from chat where id=?", new String[]{String.valueOf(id)});
-        int idColumn = cursor.getColumnIndex("id");
-        int nameColumn = cursor.getColumnIndex("name");
 
-        chatItem.setChatID(Integer.parseInt(cursor.getString(idColumn)));
-        chatItem.setName(cursor.getString(nameColumn));
+        chatItem.setChatID(id);
+        chatItem.setName(cursor.getString(Chat.CHAT_NAME));
+        chatItem.setDateTime(cursor.getString(Chat.LAST_MESSAGE_DATE_TIME));
+
+        cursor.close();
+        db.close();
 
         return chatItem;
     }
@@ -43,18 +45,26 @@ public final class ChatManager {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         ArrayList<ChatItem> chatItemList = new ArrayList<ChatItem>();
         Cursor cursor = db.rawQuery("select * from chat order by last_message_datetime", null);
-        int idColumn = cursor.getColumnIndex("id");
-        int nameColumn = cursor.getColumnIndex("name");
-        int dateTimeColumn = cursor.getColumnIndex("last_message_datetime");
+
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             ChatItem chatItem = new ChatItem();
-            chatItem.setChatID(cursor.getInt(idColumn));
-            chatItem.setName(cursor.getString(nameColumn));
-            chatItem.setDateTime(cursor.getString(dateTimeColumn));
+            chatItem.setChatID(cursor.getInt(Chat.ID));
+            chatItem.setName(cursor.getString(Chat.CHAT_NAME));
+            chatItem.setDateTime(cursor.getString(Chat.LAST_MESSAGE_DATE_TIME));
 
             chatItemList.add(chatItem);
         }
+        cursor.close();
+        db.close();
         return chatItemList;
+    }
+
+    public void saveChat(ChatItem item) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        //cv.put();
+        db.insert("chat", null, cv);
     }
 }

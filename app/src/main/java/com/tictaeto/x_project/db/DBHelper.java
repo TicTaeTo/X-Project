@@ -6,33 +6,43 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.tictaeto.x_project.utils.ApplicationManager;
 
 /**
- * Created by DEN on 30.08.2015.
+ * Created by Denis Ligin on 30.08.2015.
  */
 public class DBHelper extends SQLiteOpenHelper {
 
-    public DBHelper() {
+    private static DBHelper instance = null;
+
+    private DBHelper() {
         super(ApplicationManager.get().getApplicationContext(), "db", null, 1);
+    }
+
+    public static DBHelper get() {
+        if (instance == null) {
+            instance = new DBHelper();
+        }
+        return instance;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table chat(id integer primary key autoincrement," +
-                "chat_contact_id, " +
                 "name text," +
                 "last_message_datetime datetime, " +
-                "photo_id integer)");
+                "image_id integer)");
 
         db.execSQL("create table message(id integer primary key autoincrement, " +
                 "chat_id integer, " +
                 "contact_id integer, " +
-                "content text)");
+                "content text)" +
+                "message_date_time datetime");
 
         db.execSQL("create table contact(id integer primary key autoincrement, " +
-                "chat_contact_id integer, " +
                 "name text, )");
 
         db.execSQL("create table chat_contact(chat_id integer, " +
                 "contact_id integer)");
+
+        db.close();
     }
 
     @Override

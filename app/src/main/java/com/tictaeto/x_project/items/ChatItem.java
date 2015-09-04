@@ -3,7 +3,7 @@ package com.tictaeto.x_project.items;
 import java.util.List;
 
 /**
- * Created by DEN on 29.08.2015.
+ * Created by Denis Ligin on 29.08.2015.
  */
 public class ChatItem {
 
