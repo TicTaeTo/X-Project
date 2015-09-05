@@ -4,13 +4,30 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+
+import com.tictaeto.x_project.db.ChatManager;
+import com.tictaeto.x_project.items.ChatItem;
+import com.tictaeto.x_project.utils.ChatListAdapter;
+
+import java.util.ArrayList;
 
 public class ChatListView extends Activity {
+
+    ChatListAdapter chatListAdapter;
+    ArrayList<ChatItem> chatItems;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list_view);
+
+        chatItems = ChatManager.get().getChatList();
+        chatListAdapter = new ChatListAdapter(this, chatItems);
+        ListView chatListView = (ListView) findViewById(R.id.listView);
+        chatListView.setAdapter(chatListAdapter);
+
     }
 
     @Override

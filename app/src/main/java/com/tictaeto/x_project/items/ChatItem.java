@@ -11,6 +11,7 @@ public class ChatItem {
     private String name;
     private List<String> messages;
     private String dateTime;
+    private String lastMessage;
 
     public int getChatID() {
         return chatID;
@@ -44,4 +45,11 @@ public class ChatItem {
         this.dateTime = dateTime;
     }
 
+    public String getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(String lastMessage) {
+        this.lastMessage = lastMessage;
+    }
 }
